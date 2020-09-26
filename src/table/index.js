@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 import service from "../service.js";
 
@@ -13,10 +15,14 @@ function Table() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchRecords = () => {
     setIsLoading(true);
-    service(`shipments?_page=${page}&_limit=${limit}&q=${searchQuery}`)
+    service(
+      `shipments?_page=${page}&_limit=${limit}&q=${searchQuery}&_sort=${sortColumn}&_order=${sortOrder}`
+    )
       .then((res) => {
         setTotalRecords(parseInt(res.headers.get("X-Total-Count")));
         return res.json();
@@ -33,6 +39,27 @@ function Table() {
       });
   };
 
+  const SortArrows = ({ columnName }) => (
+    <span className="sort-arrows">
+      <FontAwesomeIcon
+        icon={faArrowUp}
+        title="ASC"
+        onClick={() => {
+          setSortColumn(columnName);
+          setSortOrder("asc");
+        }}
+      />
+      <FontAwesomeIcon
+        icon={faArrowDown}
+        title="DESC"
+        onClick={() => {
+          setSortColumn(columnName);
+          setSortOrder("desc");
+        }}
+      />
+    </span>
+  );
+
   const getTable = () => {
     if (isLoading) {
       return <img src={`${process.env.PUBLIC_URL}/assets/loader.gif`} alt="" />;
@@ -42,14 +69,38 @@ function Table() {
         <table>
           <thead>
             <tr>
-              <th> ID </th>
-              <th> Mode </th>
-              <th> Name </th>
-              <th> Origin </th>
-              <th> Status </th>
-              <th> Total </th>
-              <th> Type </th>
-              <th> User ID </th>
+              <th>
+                {" "}
+                ID <SortArrows columnName={"id"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Mode <SortArrows columnName={"mode"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Name <SortArrows columnName={"name"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Origin <SortArrows columnName={"origin"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Status <SortArrows columnName={"status"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Total <SortArrows columnName={"total"} />{" "}
+              </th>
+              <th>
+                {" "}
+                Type <SortArrows columnName={"type"} />{" "}
+              </th>
+              <th>
+                {" "}
+                User ID <SortArrows columnName={"userId"} />{" "}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +125,7 @@ function Table() {
 
   useEffect(() => {
     fetchRecords();
-  }, [page, limit]);
+  }, [page, limit, sortColumn, sortOrder]);
 
   return (
     <div className="records-page">
@@ -82,7 +133,7 @@ function Table() {
         <div className="table-controls">
           <input
             type="text"
-            placeholder={'Search'}
+            placeholder={"Search"}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {

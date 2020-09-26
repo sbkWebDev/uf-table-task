@@ -50,6 +50,28 @@
   width: 50px;
 }
 
+.table-container table th {
+  position: relative;
+}
+
+.table-container table th .sort-arrows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.sort-arrows > svg {
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.sort-arrows > svg:last-child {
+  margin-top: 5px;
+}
+
 .records-page .table-container table th,
 td {
   text-align: center;
