@@ -64,8 +64,12 @@
 }
 
 .sort-arrows > svg {
-    cursor: pointer;
-    font-size: 10px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.sort-arrows > svg.sort-active {
+  color: #ff0000;
 }
 
 .sort-arrows > svg:last-child {

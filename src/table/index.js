@@ -48,6 +48,9 @@ function Table() {
           setSortColumn(columnName);
           setSortOrder("asc");
         }}
+        className={
+          sortOrder === "asc" && sortColumn === columnName ? "sort-active" : ""
+        }
       />
       <FontAwesomeIcon
         icon={faArrowDown}
@@ -56,6 +59,9 @@ function Table() {
           setSortColumn(columnName);
           setSortOrder("desc");
         }}
+        className={
+          sortOrder === "desc" && sortColumn === columnName ? "sort-active" : ""
+        }
       />
     </span>
   );
